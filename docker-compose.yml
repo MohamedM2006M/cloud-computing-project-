@@ -34,7 +34,7 @@ services:
       DB_NAME: notesdb
       UPLOAD_DIR: /app/uploads
     volumes:
-      - notes-uploads:/app/uploads                     # external volume -> uploaded files survive container removal
+      - notes-uploads:/app/uploads                     # external volume shared with frontend -> backend writes uploaded files here
     ports:
       - "5000:5000"                                    # host:container (optional direct API access)
     networks:
@@ -50,6 +50,8 @@ services:
     image: notes-frontend:1.0
     container_name: notes-frontend
     restart: unless-stopped
+    volumes:
+      - notes-uploads:/usr/share/nginx/html/uploads:ro # SAME volume as backend (read-only) -> nginx serves uploaded files
     ports:
       - "8080:80"                                      # open http://localhost:8080
     networks:

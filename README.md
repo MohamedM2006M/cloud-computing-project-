@@ -67,10 +67,13 @@ docker build -t notes-frontend:1.0 ./frontend
 ### 4. Docker volume to persist data (external volumes)
 Two **external** volumes are used:
 
-| Volume | Mounted at | Stores |
+| Volume | Mounted in | Stores |
 |--------|-----------|--------|
-| `notes-db-data` | `/var/lib/postgresql/data` (db) | database data |
-| `notes-uploads` | `/app/uploads` (backend) | uploaded files |
+| `notes-db-data` | `db` → `/var/lib/postgresql/data` | database data |
+| `notes-uploads` | `backend` → `/app/uploads` (read/write) **and** `frontend` → `/usr/share/nginx/html/uploads` (read-only) | uploaded files |
+
+`notes-uploads` is **shared by 2 containers**: the backend saves uploaded files into it and
+Nginx in the frontend reads the same files and serves them at `http://localhost:8080/uploads/<file>`.
 
 They are declared with `external: true` in `docker-compose.yml`, which means **you create them
 yourself** and Docker Compose never creates or deletes them:

@@ -36,7 +36,7 @@ async function loadNotes() {
       <article class="note">
         <h3>${escapeHtml(n.title)}</h3>
         <p>${escapeHtml(n.content)}</p>
-        ${n.filename ? `<p>📎 <a href="${API}/uploads/${encodeURIComponent(n.filename)}" target="_blank">${escapeHtml(n.filename)}</a></p>` : ""}
+        ${n.filename ? `<p>📎 <a href="/uploads/${encodeURIComponent(n.filename)}" target="_blank">${escapeHtml(n.filename)}</a></p>` : ""}
         <div class="meta">
           <span>${new Date(n.created_at).toLocaleString()}</span>
           <button class="delete" data-id="${n.id}">Delete</button>
