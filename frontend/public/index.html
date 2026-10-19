@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker Notes App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🐳 Docker Notes App</h1>
+    <p>Frontend (Nginx) → Backend (Node.js) → Database (PostgreSQL)</p>
+    <span id="status" class="status">Checking backend…</span>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Add a note</h2>
+      <form id="note-form">
+        <input id="title" name="title" placeholder="Title" required />
+        <textarea id="content" name="content" placeholder="Write something…" rows="3"></textarea>
+        <label class="file">
+          Attach a file (optional, stored in a Docker volume)
+          <input id="file" name="file" type="file" />
+        </label>
+        <button type="submit">Save note</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Notes</h2>
+      <div id="notes"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+header {
+  background: #0db7ed;
+  color: #fff;
+  padding: 24px 16px;
+  text-align: center;
+}
+header h1 { margin: 0 0 6px; }
+header p { margin: 0 0 10px; opacity: 0.9; }
+
+.status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 0.9rem;
+}
+.status.ok { background: #16a34a; }
+.status.err { background: #dc2626; }
+
+main { max-width: 720px; margin: 24px auto; padding: 0 16px; }
+
+.card, .note {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+form { display: flex; flex-direction: column; gap: 10px; }
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font: inherit;
+}
+.file { font-size: 0.9rem; color: #475569; display: flex; flex-direction: column; gap: 6px; }
+.file input { border: none; padding: 0; }
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #0db7ed;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:hover { background: #0891b2; }
+button.delete { background: #ef4444; padding: 6px 12px; }
+button.delete:hover { background: #b91c1c; }
+
+.note h3 { margin: 0 0 6px; }
+.note p { margin: 0 0 8px; white-space: pre-wrap; }
+.note .meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #64748b; }
+.note a { color: #0369a1; }
+.empty { color: #64748b; text-align: center; }

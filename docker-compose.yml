@@ -1,0 +1,75 @@
+services:
+  # ---------- Database: PostgreSQL ----------
+  db:
+    image: postgres:16-alpine
+    container_name: notes-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: notesdb
+    volumes:
+      - notes-db-data:/var/lib/postgresql/data          # external volume -> data survives container removal
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - backend-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d notesdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ---------- Backend: Node.js + Express (custom image from alpine) ----------
+  backend:
+    build: ./backend
+    image: notes-backend:1.0
+    container_name: notes-backend
+    restart: unless-stopped
+    environment:
+      PORT: 5000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: notesdb
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - notes-uploads:/app/uploads                     # external volume -> uploaded files survive container removal
+    ports:
+      - "5000:5000"                                    # host:container (optional direct API access)
+    networks:
+      - frontend-net
+      - backend-net
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ---------- Frontend: Nginx (custom image from alpine) ----------
+  frontend:
+    build: ./frontend
+    image: notes-frontend:1.0
+    container_name: notes-frontend
+    restart: unless-stopped
+    ports:
+      - "8080:80"                                      # open http://localhost:8080
+    networks:
+      - frontend-net
+    depends_on:
+      - backend
+
+# The frontend can reach the backend, the backend can reach the database,
+# but the frontend has no route to the database.
+networks:
+  frontend-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
+
+# External volumes are created manually (see setup.sh / README) and are NOT
+# managed by Compose: `docker compose down` and even `docker compose down -v`
+# will never delete them, so the data persists after containers are removed.
+volumes:
+  notes-db-data:
+    external: true
+  notes-uploads:
+    external: true
